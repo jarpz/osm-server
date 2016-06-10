@@ -5,11 +5,11 @@
  */
 package com.osm.providers;
 
-import com.github.davidmoten.rx.jdbc.Database;
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.sql.DataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @ApplicationScoped
 public class DBProvider {
@@ -18,7 +18,7 @@ public class DBProvider {
     private DataSource dataSource;
 
     @Produces
-    public Database get() {
-        return Database.fromDataSource(dataSource);
+    public JdbcTemplate get() {
+        return new JdbcTemplate(dataSource);
     }
 }

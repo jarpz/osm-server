@@ -5,15 +5,14 @@
  */
 package com.osm.services;
 
-import com.github.davidmoten.rx.jdbc.Database;
 import com.osm.domain.Customer;
 import com.osm.utils.Utils;
+import java.sql.ResultSet;
 import java.util.List;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import org.slf4j.Logger;
-import rx.Observable;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @RequestScoped
 public class CustomersService {
@@ -39,31 +38,22 @@ public class CustomersService {
     private Logger log;
 
     @Inject
-    private Database db;
+    private JdbcTemplate db;
 
     public List<Customer> getCustomers() {
-        return db.select("select * from cliempre")
-                .get(rs -> new Customer.Builder()
-                        .setCode(Utils.trim(rs.getString(FIELDS.CODE.getName())))
-                        .setName(Utils.trim(rs.getString(FIELDS.NAME.getName())))
-                        .setIdentification(Utils.trim(rs.getString(FIELDS.IDENTIFICATION.getName())))
-                        .setAddress(Utils.trim(rs.getString(FIELDS.ADDRESS.getName()).trim()))
-                        .build())
-                .toList()
-                .toBlocking()
-                .single();
+        return db.query("select * from cliempre",
+                (ResultSet rs, int index)
+                -> new Customer.Builder()
+                .setCode(Utils.trim(rs.getString(FIELDS.CODE.getName())))
+                .setName(Utils.trim(rs.getString(FIELDS.NAME.getName())))
+                .setIdentification(Utils.trim(rs.getString(FIELDS.IDENTIFICATION.getName())))
+                .setAddress(Utils.trim(rs.getString(FIELDS.ADDRESS.getName()).trim()))
+                .build());
     }
 
     public boolean insert(Customer customer) {
         try {
-            Observable<Boolean> begin = db.beginTransaction();
-            return db.commit(db.update("insert into tbl_test (name,age) values(?,?)")
-                    .parameter(customer.getName())
-                    .parameter(customer.getAddress())
-                    .dependsOn(begin)
-                    .count())
-                    .toBlocking()
-                    .single();
+            return true;
         } catch (Throwable throwable) {
             log.error(CustomersService.class.getName(), throwable);
         }

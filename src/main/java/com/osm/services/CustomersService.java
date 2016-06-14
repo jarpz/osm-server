@@ -1,38 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.osm.services;
 
 import com.osm.domain.Customer;
+import com.osm.services.data.CustomerSql;
 import com.osm.utils.Utils;
 import java.sql.ResultSet;
 import java.util.List;
-import javax.enterprise.context.RequestScoped;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import org.slf4j.Logger;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 
-@RequestScoped
+@ApplicationScoped
 public class CustomersService {
-
-    private enum FIELDS {
-        CODE("codigo"),
-        NAME("nombre"),
-        IDENTIFICATION("cedula"),
-        ADDRESS("direccion");
-
-        private String name;
-
-        private FIELDS(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
 
     @Inject
     private Logger log;
@@ -41,13 +23,17 @@ public class CustomersService {
     private JdbcTemplate db;
 
     public List<Customer> getCustomers() {
-        return db.query("select * from cliempre",
+        return db.query(CustomerSql.FIND_ALL,
                 (ResultSet rs, int index)
                 -> new Customer.Builder()
-                .setCode(Utils.trim(rs.getString(FIELDS.CODE.getName())))
-                .setName(Utils.trim(rs.getString(FIELDS.NAME.getName())))
-                .setIdentification(Utils.trim(rs.getString(FIELDS.IDENTIFICATION.getName())))
-                .setAddress(Utils.trim(rs.getString(FIELDS.ADDRESS.getName()).trim()))
+                .setCode(Utils.trim(rs.getString(CustomerSql.FIELDS.CODE.getName())))
+                .setName(Utils.trim(rs.getString(CustomerSql.FIELDS.NAME.getName())))
+                .setIdentification(Utils.trim(rs.getString(CustomerSql.FIELDS.IDENTIFICATION.getName())))
+                .setTin(Utils.trim(rs.getString(CustomerSql.FIELDS.TIN.getName())))
+                .setAddress(Utils.trim(rs.getString(CustomerSql.FIELDS.ADDRESS.getName()).trim()))
+                .addPhone(Utils.trim(rs.getString(CustomerSql.FIELDS.PHONES.getName())))
+                .addPhone(Utils.trim(rs.getString(CustomerSql.FIELDS.MOVIL.getName())))
+                .setPriceId(rs.getInt(CustomerSql.FIELDS.PRICE.getName()))
                 .build());
     }
 
@@ -55,7 +41,7 @@ public class CustomersService {
         try {
             return true;
         } catch (Throwable throwable) {
-            log.error(CustomersService.class.getName(), throwable);
+            log.log(Level.SEVERE, "", throwable);
         }
         return false;
     }

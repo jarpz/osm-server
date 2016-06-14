@@ -8,13 +8,12 @@ package com.osm.providers;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 public class LoggingProvider {
 
     @Produces
     public Logger getLogger(@Default final InjectionPoint ip) {
-        return LoggerFactory.getLogger(ip.getMember().getDeclaringClass());
+        return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
     }
 }

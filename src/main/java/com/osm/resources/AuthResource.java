@@ -5,6 +5,7 @@
  */
 package com.osm.resources;
 
+import com.osm.exceptions.ServerException;
 import com.osm.exceptions.UnAuthorizedException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,9 +25,10 @@ public class AuthResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response auth(@HeaderParam("authorization") String authorization) throws UnAuthorizedException {
+    public Response auth(@HeaderParam("authorization") String authorization) throws ServerException {
         log.log(Level.INFO, authorization);
 
-        throw new UnAuthorizedException();
+        throw new UnAuthorizedException()
+                .putCode(1001);
     }
 }

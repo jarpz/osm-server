@@ -1,21 +1,18 @@
-
 package com.osm.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Customer implements Serializable {
+public class Customer extends Object implements Serializable {
 
-    private String code;
-    private String name;
     private String identification;
     private String address;
     private List<String> phones;
     private String tin;
-    private Integer priceId;
+    private Integer price;
+    private String type;
+    private String tag;
 
     public Customer() {
     }
@@ -26,31 +23,18 @@ public class Customer implements Serializable {
             final String tin,
             final String address,
             final List<String> phones,
-            final Integer priceId) {
+            final Integer price,
+            final String type,
+            final String tag) {
 
-        this.code = code;
-        this.name = name;
+        super(code, name);
         this.identification = identification;
         this.tin = tin;
         this.address = address;
         this.phones = phones;
-        this.priceId = priceId;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        this.price = price;
+        this.type = type;
+        this.tag = tag;
     }
 
     public String getIdentification() {
@@ -85,12 +69,28 @@ public class Customer implements Serializable {
         this.phones = phones;
     }
 
-    public Integer getPriceId() {
-        return priceId;
+    public Integer getPrice() {
+        return price;
     }
 
-    public void setPriceId(Integer priceId) {
-        this.priceId = priceId;
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public static class Builder {
@@ -101,7 +101,9 @@ public class Customer implements Serializable {
         private String address;
         private String tin;
         private List<String> phones;
-        private Integer priceId;
+        private Integer price;
+        private String type;
+        private String tag;
 
         public Builder() {
         }
@@ -147,13 +149,23 @@ public class Customer implements Serializable {
             return this;
         }
 
-        public Builder setPriceId(int priceId) {
-            this.priceId = priceId;
+        public Builder setPrice(int price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder setType(String type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder setTag(String tag) {
+            this.tag = tag;
             return this;
         }
 
         public Customer build() {
-            return new Customer(code, name, identification, tin, address, phones, priceId);
+            return new Customer(code, name, identification, tin, address, phones, price, type, tag);
         }
     }
 }

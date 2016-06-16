@@ -1,8 +1,9 @@
-
 package com.osm.services;
 
 import com.osm.domain.Customer;
+import com.osm.domain.CustomerType;
 import com.osm.services.data.CustomerSql;
+import com.osm.services.data.CustomerTypeSql;
 import com.osm.utils.Utils;
 import java.sql.ResultSet;
 import java.util.List;
@@ -26,14 +27,26 @@ public class CustomersService {
         return db.query(CustomerSql.FIND_ALL,
                 (ResultSet rs, int index)
                 -> new Customer.Builder()
-                .setCode(Utils.trim(rs.getString(CustomerSql.FIELDS.CODE.getName())))
-                .setName(Utils.trim(rs.getString(CustomerSql.FIELDS.NAME.getName())))
-                .setIdentification(Utils.trim(rs.getString(CustomerSql.FIELDS.IDENTIFICATION.getName())))
-                .setTin(Utils.trim(rs.getString(CustomerSql.FIELDS.TIN.getName())))
-                .setAddress(Utils.trim(rs.getString(CustomerSql.FIELDS.ADDRESS.getName()).trim()))
-                .addPhone(Utils.trim(rs.getString(CustomerSql.FIELDS.PHONES.getName())))
-                .addPhone(Utils.trim(rs.getString(CustomerSql.FIELDS.MOVIL.getName())))
-                .setPriceId(rs.getInt(CustomerSql.FIELDS.PRICE.getName()))
+                .setCode(Utils.trim(rs.getString(CustomerSql.FIELDS.CODE)))
+                .setName(Utils.trim(rs.getString(CustomerSql.FIELDS.NAME)))
+                .setIdentification(Utils.trim(rs.getString(CustomerSql.FIELDS.IDENTIFICATION)))
+                .setTin(Utils.trim(rs.getString(CustomerSql.FIELDS.TIN)))
+                .setAddress(Utils.trim(rs.getString(CustomerSql.FIELDS.ADDRESS).trim()))
+                .addPhone(Utils.trim(rs.getString(CustomerSql.FIELDS.PHONES)))
+                .addPhone(Utils.trim(rs.getString(CustomerSql.FIELDS.MOVIL)))
+                .setPrice(rs.getInt(CustomerSql.FIELDS.PRICE))
+                .setType(Utils.trim(rs.getString(CustomerSql.FIELDS.TYPE)))
+                .setTag(Utils.trim(rs.getString(CustomerSql.FIELDS.TAG)))
+                .build());
+    }
+
+    public List<CustomerType> getTypes() {
+        return db.query(CustomerTypeSql.FIND_ALL,
+                (ResultSet rs, int index)
+                -> new CustomerType.Builder()
+                .setCode(Utils.trim(rs.getString(CustomerTypeSql.FIELDS.CODE)))
+                .setName(Utils.trim(rs.getString(CustomerTypeSql.FIELDS.NAME)))
+                .setIsDefault(rs.getInt(CustomerTypeSql.FIELDS.DEFAULT) > 0)
                 .build());
     }
 

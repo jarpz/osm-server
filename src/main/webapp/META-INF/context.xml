@@ -3,5 +3,6 @@
     <Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" 
               maxActive="100" maxIdle="30" maxWait="10000" 
               name="jdbc/pskloud" username="root" password="admin" type="javax.sql.DataSource" 
-              url="jdbc:mysql://localhost:3306/admin000001" />
+              url="jdbc:mysql://localhost:3306/adminlinkco?zeroDateTimeBehavior=convertToNull" 
+    />
 </Context>

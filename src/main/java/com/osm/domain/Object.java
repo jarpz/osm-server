@@ -3,7 +3,7 @@ package com.osm.domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Object implements Serializable {
 
     private String code;

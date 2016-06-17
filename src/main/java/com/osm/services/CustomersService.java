@@ -5,14 +5,14 @@ import com.osm.domain.CustomerType;
 import com.osm.services.data.CustomerSql;
 import com.osm.services.data.CustomerTypeSql;
 import com.osm.utils.Utils;
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.impl.DSL;
 
 @ApplicationScoped
 public class CustomersService {
@@ -21,33 +21,33 @@ public class CustomersService {
     private Logger log;
 
     @Inject
-    private JdbcTemplate db;
+    private DSLContext db;
 
     public List<Customer> getCustomers() {
-        return db.query(CustomerSql.FIND_ALL,
-                (ResultSet rs, int index)
-                -> new Customer.Builder()
-                .setCode(Utils.trim(rs.getString(CustomerSql.FIELDS.CODE)))
-                .setName(Utils.trim(rs.getString(CustomerSql.FIELDS.NAME)))
-                .setIdentification(Utils.trim(rs.getString(CustomerSql.FIELDS.IDENTIFICATION)))
-                .setTin(Utils.trim(rs.getString(CustomerSql.FIELDS.TIN)))
-                .setAddress(Utils.trim(rs.getString(CustomerSql.FIELDS.ADDRESS).trim()))
-                .addPhone(Utils.trim(rs.getString(CustomerSql.FIELDS.PHONES)))
-                .addPhone(Utils.trim(rs.getString(CustomerSql.FIELDS.MOVIL)))
-                .setPrice(rs.getInt(CustomerSql.FIELDS.PRICE))
-                .setType(Utils.trim(rs.getString(CustomerSql.FIELDS.TYPE)))
-                .setTag(Utils.trim(rs.getString(CustomerSql.FIELDS.TAG)))
-                .build());
+        return db.select()
+                .from(DSL.table("cliempre"))
+                .where(DSL.field("status").equal(1))
+                .fetch((Record rs) -> new Customer.Builder()
+                        .setCode(Utils.trim(rs.get(DSL.field(CustomerSql.FIELDS.CODE), String.class)))
+                        .setIdentification(Utils.trim(rs.get(DSL.field(CustomerSql.FIELDS.IDENTIFICATION), String.class)))
+                        .setName(Utils.trim(rs.get(DSL.field(CustomerSql.FIELDS.NAME), String.class)))
+                        .setType(Utils.trim(rs.get(DSL.field(CustomerSql.FIELDS.TYPE, String.class))))
+                        .setTag(Utils.trim(rs.get(DSL.field(CustomerSql.FIELDS.TAG, String.class))))
+                        .setAddress(Utils.trim(rs.get(DSL.field(CustomerSql.FIELDS.ADDRESS, String.class))))
+                        .setTin(Utils.trim(rs.get(DSL.field(CustomerSql.FIELDS.TIN, String.class))))
+                        .setPrice(rs.get(DSL.field(CustomerSql.FIELDS.PRICE, Double.class)).intValue())
+                        .addPhone(Utils.trim(rs.get(DSL.field(CustomerSql.FIELDS.PHONES), String.class)))
+                        .build());
     }
 
     public List<CustomerType> getTypes() {
-        return db.query(CustomerTypeSql.FIND_ALL,
-                (ResultSet rs, int index)
-                -> new CustomerType.Builder()
-                .setCode(Utils.trim(rs.getString(CustomerTypeSql.FIELDS.CODE)))
-                .setName(Utils.trim(rs.getString(CustomerTypeSql.FIELDS.NAME)))
-                .setIsDefault(rs.getInt(CustomerTypeSql.FIELDS.DEFAULT) > 0)
-                .build());
+        return db.select()
+                .from(DSL.table("tipocli"))
+                .fetch((Record rs) -> new CustomerType.Builder()
+                        .setCode(Utils.trim(rs.get(CustomerTypeSql.FIELDS.CODE, String.class)))
+                        .setName(Utils.trim(rs.get(CustomerTypeSql.FIELDS.NAME, String.class)))
+                        .setIsDefault(rs.get(CustomerTypeSql.FIELDS.DEFAULT, Integer.class) > 0)
+                        .build());
     }
 
     public boolean insert(Customer customer) {

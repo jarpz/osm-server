@@ -1,6 +1,6 @@
-
 package com.osm.resources;
 
+import com.osm.providers.JacksonProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -20,6 +20,7 @@ public class RestConfig extends ResourceConfig {
     public RestConfig() {
         packages("com.osm.resources;com.osm.providers");
         register(JacksonFeature.class);
+        register(JacksonProvider.class);
         register(RolesAllowedDynamicFeature.class);
     }
 

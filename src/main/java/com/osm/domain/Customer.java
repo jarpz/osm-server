@@ -1,5 +1,6 @@
 package com.osm.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,8 @@ public class Customer extends Object implements Serializable {
     private Integer price;
     private String type;
     private String tag;
+
+    private String contact;
 
     public Customer() {
     }
@@ -69,6 +72,15 @@ public class Customer extends Object implements Serializable {
         this.phones = phones;
     }
 
+    @JsonIgnore
+    public void addPhone(String phone) {
+        if (this.phones == null) {
+            this.phones = new ArrayList<>();
+        }
+
+        this.phones.add(phone);
+    }
+
     public Integer getPrice() {
         return price;
     }
@@ -93,79 +105,11 @@ public class Customer extends Object implements Serializable {
         this.tag = tag;
     }
 
-    public static class Builder {
+    public String getContact() {
+        return contact;
+    }
 
-        private String code;
-        private String name;
-        private String identification;
-        private String address;
-        private String tin;
-        private List<String> phones;
-        private Integer price;
-        private String type;
-        private String tag;
-
-        public Builder() {
-        }
-
-        public Builder setCode(String code) {
-            this.code = code;
-            return this;
-        }
-
-        public Builder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder setIdentification(String identification) {
-            this.identification = identification;
-            return this;
-        }
-
-        public Builder setTin(String tin) {
-            this.tin = tin;
-            return this;
-        }
-
-        public Builder setAddress(String address) {
-            this.address = address;
-            return this;
-        }
-
-        public void setPhones(List<String> phones) {
-            this.phones = phones;
-        }
-
-        public Builder addPhone(String phone) {
-            if (this.phones == null) {
-                this.phones = new ArrayList<>();
-            }
-
-            if (phone != null && !phone.isEmpty()) {
-                this.phones.add(phone);
-            }
-
-            return this;
-        }
-
-        public Builder setPrice(int price) {
-            this.price = price;
-            return this;
-        }
-
-        public Builder setType(String type) {
-            this.type = type;
-            return this;
-        }
-
-        public Builder setTag(String tag) {
-            this.tag = tag;
-            return this;
-        }
-
-        public Customer build() {
-            return new Customer(code, name, identification, tin, address, phones, price, type, tag);
-        }
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 }

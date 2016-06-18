@@ -10,8 +10,11 @@ public class StringTrimSerializer extends JsonSerializer<String> {
 
     @Override
     public void serialize(String value, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
-        if (value != null) {
-            jg.writeString(value.trim());
+        String trim = value.trim();
+        if (trim.length() > 0) {
+            jg.writeString(trim);
+        } else {
+            jg.writeNull();
         }
     }
 }

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.osm.exceptions.ServerException;
 import java.io.IOException;
 
-
 public class ServerExceptionSerializer extends JsonSerializer<ServerException> {
 
     @Override
@@ -15,6 +14,9 @@ public class ServerExceptionSerializer extends JsonSerializer<ServerException> {
         jgen.writeStartObject();
         jgen.writeNumberField("code", error.getCode());
         jgen.writeStringField("message", error.getMessage());
+        if (error.getLocalizedMessage() != null) {
+            jgen.writeStringField("localizedMessage", error.getLocalizedMessage());
+        }
         jgen.writeEndObject();
     }
 

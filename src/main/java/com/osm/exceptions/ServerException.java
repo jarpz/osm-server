@@ -6,12 +6,13 @@ import com.osm.providers.ServerExceptionSerializer;
 import java.io.Serializable;
 
 @JsonSerialize(using = ServerExceptionSerializer.class)
-public class ServerException extends Throwable implements Serializable {
+public class ServerException extends RuntimeException implements Serializable {
 
     public static final int UNHANDLER_ERROR = -1;
 
     private int code;
     private String message;
+    private String localizedMessage;
 
     public ServerException() {
     }
@@ -49,10 +50,25 @@ public class ServerException extends Throwable implements Serializable {
         return this;
     }
 
+    public String getLocalizedMessage() {
+        return localizedMessage;
+    }
+
+    public void setLocalizedMessage(String localizedMessage) {
+        this.localizedMessage = localizedMessage;
+    }
+
+    @JsonIgnore
+    public ServerException putLocalizedMessage(String message) {
+        this.localizedMessage = message;
+        return this;
+    }
+
     public static class Builder {
 
         private int code;
         private String message;
+        private String localizedMessage;
 
         public Builder() {
         }
@@ -67,8 +83,14 @@ public class ServerException extends Throwable implements Serializable {
             return this;
         }
 
+        public Builder setLocalizedMessage(String localizedMessage) {
+            this.localizedMessage = localizedMessage;
+            return this;
+        }
+
         public ServerException build() {
-            return new ServerException(code, message);
+            return new ServerException(code, message)
+                    .putLocalizedMessage(localizedMessage);
         }
     }
 }

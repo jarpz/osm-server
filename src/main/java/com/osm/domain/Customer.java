@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer extends Object implements Serializable {
+public class Customer extends Model implements Serializable {
 
     private String identification;
     private String address;
@@ -13,7 +13,8 @@ public class Customer extends Object implements Serializable {
     private String tin;
     private Integer price;
     private String type;
-    private String tag;
+    private String zone;
+    private TaxType taxType;
 
     private String contact;
 
@@ -28,7 +29,7 @@ public class Customer extends Object implements Serializable {
             final List<String> phones,
             final Integer price,
             final String type,
-            final String tag) {
+            final String zone) {
 
         super(code, name);
         this.identification = identification;
@@ -37,7 +38,7 @@ public class Customer extends Object implements Serializable {
         this.phones = phones;
         this.price = price;
         this.type = type;
-        this.tag = tag;
+        this.zone = zone;
     }
 
     public String getIdentification() {
@@ -97,12 +98,20 @@ public class Customer extends Object implements Serializable {
         this.type = type;
     }
 
-    public String getTag() {
-        return tag;
+    public String getZone() {
+        return zone;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setZone(String zone) {
+        this.zone = zone;
+    }
+
+    public TaxType getTaxType() {
+        return taxType;
+    }
+
+    public void setTaxType(TaxType taxType) {
+        this.taxType = taxType;
     }
 
     public String getContact() {

@@ -1,6 +1,6 @@
 package com.osm.domain;
 
-public class Company extends Object {
+public class Company extends Model {
 
     private String branch;
 

@@ -4,15 +4,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Object implements Serializable {
+public class Model implements Serializable {
 
     private String code;
     private String name;
 
-    public Object() {
+    public Model() {
     }
 
-    public Object(String code, String name) {
+    public Model(String code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -51,8 +51,8 @@ public class Object implements Serializable {
             return this;
         }
 
-        public Object build() {
-            return new Object(code, name);
+        public Model build() {
+            return new Model(code, name);
         }
     }
 }

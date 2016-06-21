@@ -22,7 +22,7 @@ import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
 @ApplicationScoped
-public class CustomersService {
+public class CustomerService {
 
     @Inject
     private Logger log;

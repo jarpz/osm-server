@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 @ApplicationScoped
 public class DBProvider {

@@ -5,7 +5,7 @@ import com.osm.domain.Customer;
 import com.osm.domain.CustomerType;
 import com.osm.domain.Model;
 import com.osm.domain.TaxType;
-import com.osm.services.CustomersService;
+import com.osm.services.CustomerService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,25 +23,25 @@ import javax.ws.rs.core.Response;
 
 @Path("/customers")
 @RequestScoped
-public class CustomersResource {
+public class CustomerResource {
 
     //
     private Company company = new Company("LINKCO", "LINKCO", "001");
 
     @Inject
-    private CustomersService mCustomersService;
+    private CustomerService mCustomerService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Customer> getAll() {
-        return mCustomersService.getCustomers();
+        return mCustomerService.getCustomers();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(Customer customer) {
-        mCustomersService.insert(company, customer);
+        mCustomerService.insert(company, customer);
         return Response
                 .status(Response.Status.CREATED)
                 .build();
@@ -51,7 +51,7 @@ public class CustomersResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response update(Customer customer) {
-        mCustomersService.update(customer);
+        mCustomerService.update(customer);
         return Response
                 .ok()
                 .build();
@@ -61,14 +61,14 @@ public class CustomersResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/types")
     public List<CustomerType> getTypes() {
-        return mCustomersService.getTypes(company);
+        return mCustomerService.getTypes(company);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/zones")
     public List<Model> getZones() {
-        return mCustomersService.getZones(company);
+        return mCustomerService.getZones(company);
     }
 
     @GET

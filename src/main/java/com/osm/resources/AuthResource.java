@@ -7,8 +7,6 @@ package com.osm.resources;
 
 import com.osm.exceptions.ServerException;
 import com.osm.exceptions.UnAuthorizedException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -16,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.apache.log4j.Logger;
 
 @Path("/auth")
 public class AuthResource {
@@ -25,8 +24,8 @@ public class AuthResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response auth(@HeaderParam("authorization") String authorization) throws ServerException {
-        log.log(Level.INFO, authorization);
+    public Response auth(@HeaderParam("Authorization") String authorization) throws ServerException {
+        log.info(authorization);
 
         throw new UnAuthorizedException()
                 .putCode(1001);

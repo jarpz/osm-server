@@ -5,8 +5,8 @@
     </session-config>
     
     <context-param>
-        <param-name>log4j-config-location</param-name>
-        <param-value>WEB-INF/log4j.properties</param-value>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>/WEB-INF/log4j.properties</param-value>
     </context-param>
     
     <resource-ref>

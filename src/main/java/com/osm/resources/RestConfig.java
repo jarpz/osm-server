@@ -1,12 +1,12 @@
 package com.osm.resources;
 
 import com.osm.providers.JacksonProvider;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;
+import org.apache.log4j.Logger;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
@@ -16,7 +16,7 @@ public class RestConfig extends ResourceConfig {
 
     @Inject
     private Logger log;
-
+    
     public RestConfig() {
         packages("com.osm.resources;com.osm.providers");
         register(JacksonFeature.class);
@@ -26,11 +26,11 @@ public class RestConfig extends ResourceConfig {
 
     @PostConstruct
     public void postConstruct() {
-        log.log(Level.INFO, "Deploy App!");
+        log.info("Deploy App!");
     }
 
     @PreDestroy
     public void preDestroy() {
-        log.log(Level.INFO, "Undeploy app!");
+        log.info("Undeploy app!");
     }
 }

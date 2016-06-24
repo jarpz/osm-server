@@ -4,14 +4,13 @@ import com.osm.exceptions.CreateException;
 import com.osm.exceptions.ServerException;
 import com.osm.exceptions.UnAuthorizedException;
 import com.osm.exceptions.UpdateException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import org.apache.log4j.Logger;
 
 @Provider
 public class ExceptionProvider implements ExceptionMapper<Throwable> {
@@ -21,7 +20,7 @@ public class ExceptionProvider implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(Throwable throwable) {
-        log.log(Level.SEVERE, "", throwable);
+        log.error("", throwable);
 
         if (throwable instanceof ServerException) {
             Response.Status status = Response.Status.SERVICE_UNAVAILABLE;

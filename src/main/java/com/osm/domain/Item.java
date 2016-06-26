@@ -1,16 +1,19 @@
-
 package com.osm.domain;
 
-public class Item extends Model{
-    
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Item extends Model {
+
     private String group;
-    private Double price;
+    private List<Double> price;
     private Double tax;
     private Long stock;
 
     public Item() {
-    }   
-    
+    }
+
     public String getGroup() {
         return group;
     }
@@ -19,12 +22,20 @@ public class Item extends Model{
         this.group = group;
     }
 
-    public Double getPrice() {
+    public List<Double> getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(List<Double> price) {
         this.price = price;
+    }
+
+    @JsonIgnore
+    public void addPrice(final Double price) {
+        if (this.price == null) {
+            this.price = new ArrayList<>();
+        }
+        this.price.add(price);
     }
 
     public Double getTax() {
@@ -42,5 +53,5 @@ public class Item extends Model{
     public void setStock(Long stock) {
         this.stock = stock;
     }
-  
+
 }

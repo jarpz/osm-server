@@ -42,6 +42,7 @@ public class CustomerService {
                     customer.setAddress(rs.get(DSL.field("direccion", String.class)));
                     customer.setTin(rs.get(DSL.field("nrorif", String.class)));
                     customer.addPhone(rs.get(DSL.field("telefonos"), String.class));
+                    customer.setPrice(rs.get("precio", Double.class).intValue());
                     customer.setTaxType(TaxType.valueOf(rs.get(DSL.field("formafis", Double.class)).intValue()));
                     return customer;
                 });
@@ -114,14 +115,14 @@ public class CustomerService {
             if (customer.getZone() != null) {
                 values.put(DSL.field("sector"), customer.getZone());
             }
-                        
-            if(customer.getTaxType() !=null){
-                values.put(DSL.field("formafis"),customer.getTaxType().value());
+
+            if (customer.getTaxType() != null) {
+                values.put(DSL.field("formafis"), customer.getTaxType().value());
             }
-            
+
             if (customer.getContact() != null) {
                 values.put(DSL.field("perscont"), customer.getContact());
-            }           
+            }
 
             if (values.isEmpty() || customer.getCode() == null) {
                 throw new UpdateException()

@@ -14,6 +14,10 @@ public class Model implements Serializable {
     public Model() {
     }
 
+    public Model(String code) {
+        this.code = code;
+    }
+
     public Model(String code, String name) {
         this.code = code;
         this.name = name;

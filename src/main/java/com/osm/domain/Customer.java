@@ -21,6 +21,10 @@ public class Customer extends Model implements Serializable {
     public Customer() {
     }
 
+    public Customer(String code) {
+        super(code);
+    }
+
     public Customer(final String code,
             final String name,
             final String identification,

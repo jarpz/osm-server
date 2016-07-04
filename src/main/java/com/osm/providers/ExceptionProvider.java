@@ -1,9 +1,7 @@
 package com.osm.providers;
 
-import com.osm.exceptions.CreateException;
-import com.osm.exceptions.ServerException;
-import com.osm.exceptions.UnAuthorizedException;
-import com.osm.exceptions.UpdateException;
+import com.osm.exceptions.*;
+
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -29,6 +27,8 @@ public class ExceptionProvider implements ExceptionMapper<Throwable> {
                 status = Response.Status.BAD_REQUEST;
             } else if (throwable instanceof UnAuthorizedException) {
                 status = Response.Status.UNAUTHORIZED;
+            }else if(throwable instanceof InvalidParamsException){
+                status = Response.Status.BAD_REQUEST;
             }
 
             return Response.status(status)

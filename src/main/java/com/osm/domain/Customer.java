@@ -15,6 +15,7 @@ public class Customer extends Model implements Serializable {
     private String type;
     private String zone;
     private TaxType taxType;
+    private int creditDays;
 
     private String contact;
 
@@ -118,11 +119,21 @@ public class Customer extends Model implements Serializable {
         this.taxType = taxType;
     }
 
+    @JsonIgnore
     public String getContact() {
         return contact;
     }
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    @JsonIgnore
+    public int getCreditDays() {
+        return creditDays;
+    }
+
+    public void setCreditDays(int creditDays) {
+        this.creditDays = creditDays;
     }
 }

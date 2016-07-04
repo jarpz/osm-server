@@ -1,10 +1,10 @@
 package com.osm.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -96,5 +96,14 @@ public class Order implements Serializable {
 
     public void setItems(List<OrderItem> items) {
         this.items = items;
+    }
+
+    @JsonIgnore
+    public List<String> getItemsCode() {
+        List<String> codes = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            codes.add(items.get(i).getCode());
+        }
+        return codes;
     }
 }

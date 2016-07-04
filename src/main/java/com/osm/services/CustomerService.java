@@ -6,18 +6,22 @@ import com.osm.domain.CustomerType;
 import com.osm.domain.Model;
 import com.osm.domain.TaxType;
 import com.osm.exceptions.CreateException;
+import com.osm.exceptions.InvalidParamsException;
 import com.osm.exceptions.ServerException;
 import com.osm.exceptions.UpdateException;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+
 import org.apache.log4j.Logger;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
+import org.jooq.RecordMapper;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
@@ -30,26 +34,24 @@ public class CustomerService {
     @Inject
     private DSLContext db;
 
+    public Customer get(final String code) {
+        if (code == null)
+            throw new InvalidParamsException();
+        return db.select()
+                .from(DSL.table("cliempre"))
+                .where(DSL.field("codigo").eq(code))
+                .fetchOne(mapper);
+    }
+
     public List<Customer> getCustomers() {
         return db.select()
                 .from(DSL.table("cliempre"))
                 .where(DSL.field("status").equal(1))
-                .fetch((Record rs) -> {
-                    Customer customer = new Customer();
-                    customer.setCode(rs.get(DSL.field("codigo"), String.class));
-                    customer.setName(rs.get(DSL.field("nombre"), String.class));
-                    customer.setZone(rs.get(DSL.field("sector", String.class)));
-                    customer.setAddress(rs.get(DSL.field("direccion", String.class)));
-                    customer.setTin(rs.get(DSL.field("nrorif", String.class)));
-                    customer.addPhone(rs.get(DSL.field("telefonos"), String.class));
-                    customer.setPrice(rs.get("precio", Double.class).intValue());
-                    customer.setTaxType(TaxType.valueOf(rs.get(DSL.field("formafis", Double.class)).intValue()));
-                    return customer;
-                });
+                .fetch(mapper);
     }
 
     public boolean insert(final Company company,
-            final Customer customer) throws ServerException {
+                          final Customer customer) throws ServerException {
 
         try {
 
@@ -60,7 +62,7 @@ public class CustomerService {
 
                 CustomerType type = getTypes(company)
                         .stream()
-                        .filter((CustomerType t) -> t.getIsDefault())
+                        .filter(CustomerType::getIsDefault)
                         .findFirst()
                         .get();
 
@@ -161,4 +163,19 @@ public class CustomerService {
                 .fetch((Record rs) -> new Model(rs.get(DSL.field("codigo"), String.class),
                         rs.get(DSL.field("zona"), String.class)));
     }
+
+
+    private RecordMapper<Record, Customer> mapper = rs -> {
+        Customer customer = new Customer();
+        customer.setCode(rs.get(DSL.field("codigo"), String.class));
+        customer.setName(rs.get(DSL.field("nombre"), String.class));
+        customer.setZone(rs.get(DSL.field("sector", String.class)));
+        customer.setAddress(rs.get(DSL.field("direccion", String.class)));
+        customer.setTin(rs.get(DSL.field("nrorif", String.class)));
+        customer.addPhone(rs.get(DSL.field("telefonos"), String.class));
+        customer.setPrice(rs.get("precio", Double.class).intValue());
+        customer.setTaxType(TaxType.valueOf(rs.get(DSL.field("formafis", Double.class)).intValue()));
+        customer.setContact(rs.get(DSL.field("perscont", String.class)));
+        return customer;
+    };
 }

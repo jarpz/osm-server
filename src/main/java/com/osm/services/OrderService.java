@@ -4,27 +4,29 @@ import com.osm.domain.Company;
 import com.osm.domain.Customer;
 import com.osm.domain.Order;
 import com.osm.domain.OrderItem;
-
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.sql.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Resource;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
 import com.osm.exceptions.CreateException;
 import com.osm.exceptions.InvalidParamsException;
 import org.apache.log4j.Logger;
-import org.jooq.*;
+import org.jooq.DSLContext;
+import org.jooq.InsertValuesStepN;
+import org.jooq.Record;
+import org.jooq.Result;
 import org.jooq.impl.DSL;
+
+import javax.annotation.Resource;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class OrderService {
+
+    private static final String ORDER_TYPE = "PED";
 
     @Resource(name = "string/defaultUser")
     private String defaultUser;
@@ -53,7 +55,7 @@ public class OrderService {
                 .innerJoin(DSL.table("opermv").as("orderitem"))
                 .on(DSL.field("order.documento").eq(DSL.field("orderitem.documento")))
                 .where(DSL.field("order.id_empresa").eq(company.getCode())
-                        .and(DSL.field("order.tipodoc").eq("PED")))
+                        .and(DSL.field("order.tipodoc").eq(ORDER_TYPE)))
                 .orderBy(DSL.field("order.documento"),
                         DSL.field("order.codcliente"),
                         DSL.field("orderitem.codigo"))
@@ -76,7 +78,7 @@ public class OrderService {
                 .innerJoin(DSL.table("opermv").as("orderitem"))
                 .on(DSL.field("order.documento").eq(DSL.field("orderitem.documento")))
                 .where(DSL.field("order.codcliente").eq(cs.getCode())
-                        .and(DSL.field("order.tipodoc").eq("PED")))
+                        .and(DSL.field("order.tipodoc").eq(ORDER_TYPE)))
                 .orderBy(DSL.field("order.documento"),
                         DSL.field("order.codcliente"),
                         DSL.field("orderitem.codigo"))
@@ -158,7 +160,7 @@ public class OrderService {
                             DSL.field("horadocum"), DSL.field("despacho_nro"),
                             DSL.field("fechayhora"), DSL.field("idvalidacion"))
                     .values(company.getCode(), company.getBranch(),
-                            "PED", "001", orderSeq, order.getCustomer().getCode(),
+                            ORDER_TYPE, "001", orderSeq, order.getCustomer().getCode(),
                             order.getCustomer().getName(), order.getCustomer().getContact(),
                             order.getCustomer().getTin(), order.getCustomer().getAddress(),
                             order.getCustomer().getPhones().get(0), order.getCustomer().getTaxType().value(),
@@ -193,10 +195,11 @@ public class OrderService {
                                 DSL.field("agrupado"), DSL.field("compuesto"),
                                 DSL.field("usaexist"), DSL.field("estacion"));
                 for (OrderItem orderItem : items) {
+                    String[] groups = orderItem.getGroup().split(",");
                     valuesStepN = valuesStepN.values(
                             company.getCode(), company.getBranch(),
-                            "PED", orderSeq, orderItem.getGroup().split(",")[0],
-                            orderItem.getGroup().split(",")[1], orderItem.getOrigin(),
+                            ORDER_TYPE, orderSeq, groups.length > 0 ? groups[0] : "",
+                            groups.length > 1 ? groups[1] : "", orderItem.getOrigin(),
                             orderItem.getCode(), "000NISE", orderItem.getName(),
                             orderItem.getCost(), orderItem.getUnitPrice(),
                             orderItem.getUnitPrice(), orderItem.getUnitPrice(),

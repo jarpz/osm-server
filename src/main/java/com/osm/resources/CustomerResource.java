@@ -43,7 +43,7 @@ public class CustomerResource {
     public Response create(Customer customer) {
         mCustomerService.insert(company, customer);
         return Response
-                .status(Response.Status.CREATED)
+                .ok()
                 .build();
     }
 

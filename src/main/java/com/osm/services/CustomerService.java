@@ -36,7 +36,8 @@ public class CustomerService {
 
     public Customer get(final String code) {
         if (code == null)
-            throw new InvalidParamsException();
+            throw new InvalidParamsException()
+                    .putCode(10010);
         return db.select()
                 .from(DSL.table("cliempre"))
                 .where(DSL.field("codigo").eq(code))
@@ -83,6 +84,7 @@ public class CustomerService {
                         .execute() > 0;
             } else {
                 throw new CreateException()
+                        .putMessage("Customer with code {" + customer.getCode() + "} already exist")
                         .putCode(10002);
             }
         } catch (DataAccessException throwable) {

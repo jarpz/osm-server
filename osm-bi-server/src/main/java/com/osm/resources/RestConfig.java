@@ -3,7 +3,6 @@ package com.osm.resources;
 import com.osm.providers.JacksonProvider;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;
 import org.apache.log4j.Logger;

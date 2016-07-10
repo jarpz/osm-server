@@ -3,7 +3,6 @@ package com.osm.resources;
 import com.osm.domain.Company;
 import com.osm.domain.Item;
 import com.osm.services.MemCachedService;
-import com.osm.services.MemCachedService.JsonTranscoder;
 import com.osm.services.ItemService;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
